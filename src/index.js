@@ -2,7 +2,7 @@ import './css/styles.css';
 import debounce from 'lodash.debounce';
 import Notiflix from 'notiflix';
 import countryCard from '../tamplates/city-card.hbs';
-
+import API from '../src/fetch-api';
 const DEBOUNCE_DELAY = 300;
 
 
@@ -14,23 +14,19 @@ const refs = {
     countryInfo: document.querySelector('.country-info'),
 
 }
+refs.input.addEventListener('input', onSearch);
 
-fetchCountries().then(renderCountryCard).catch(error => console.log(error));
+function onSearch(e) {
 
+    e.preventDefault();
+    const form = e.currentTarget.value;
 
-//возвращяет промис
-function fetchCountries(name) {
-
-    return fetch(`https://restcountries.com/v3.1/name/${name}?fields=name,capital,population,flags,languages`)
-        .then(response => {
-            return response.json();
-        });
-    //данные про размуетку
-    // .then(renderCountryCard)
-    // .catch(error => {
-    //     console.log(error);
-    // });
+    API.fetchCountries(form)
+        .then(renderCountryCard)
+        .catch(onFetchError)
+        .finally(() => form.reset());
 }
+//возвращяет промис
 
 
 
@@ -41,4 +37,8 @@ function renderCountryCard(country) {
 
 
 
+}
+
+function onFetchError(error) {
+    Notiflix.Notify.info('Too many matches found. Please enter a more specific name.');
 }
