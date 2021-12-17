@@ -14,14 +14,15 @@ const refs = {
     countryInfo: document.querySelector('.country-info'),
 
 }
-refs.input.addEventListener('input', onSearch);
+refs.input.addEventListener('input', debounce(onSearch, DEBOUNCE_DELAY));
 
 function onSearch(e) {
 
     e.preventDefault();
     const form = e.currentTarget.value;
+    const value = form.trim();
 
-    API.fetchCountries(form)
+    API.fetchCountries(value)
         .then(renderCountryCard)
         .catch(onFetchError)
         .finally(() => form.reset());
