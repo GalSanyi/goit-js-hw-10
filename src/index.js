@@ -2,6 +2,7 @@ import './css/styles.css';
 import debounce from 'lodash.debounce';
 import Notiflix from 'notiflix';
 import countryCard from '../tamplates/city-card.hbs';
+import oneCountry from '../tamplates/oneCountry.hbs';
 import API from '../src/fetch-api';
 const DEBOUNCE_DELAY = 300;
 
@@ -43,22 +44,27 @@ function onSearch(e) {
 
 function renderCountryCard(country) {
     const markup = countryCard(country);
-    // const markupOneCountry = oneCountry(country);
+    const markupOneCountry = oneCountry(country);
     refs.countryInfo.innerHTML = markup;
 
     if (country.length > 10) {
         refs.countryInfo.innerHTML = '';
-        refs.countryList.id = '';
+        refs.countryList.innerHTML = '';
         return Notiflix.Notify.info('Too many matches found. Please enter a more specific name.');
     } else if (country.length >= 2 && country.length <= 10) {
+        refs.countryList.innerHTML = markup;
         refs.countryInfo.innerHTML = '';
-        return Notiflix.Notify.info('Too many matches found. Please enter a more specific name.');
+        return;
     } else if (country.length === 1) {
-        // refs.countryInfo.innerHTML = markupOneCountry;
+        refs.countryInfo.innerHTML = markupOneCountry;
         refs.countryList.innerHTML = '';
+        return;
     }
 
 }
+
+
+
 
 function onFetchError(error) {
     Notiflix.Notify.info('Too many matches found. Please enter a more specific name.');
