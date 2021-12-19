@@ -19,13 +19,22 @@ refs.input.addEventListener('input', debounce(onSearch, DEBOUNCE_DELAY));
 function onSearch(e) {
 
     e.preventDefault();
-    const form = e.currentTarget.value;
+    const form = e.target.value;
     const value = form.trim();
+    if (value === '') {
+        refs.countryList.innerHTML = '';
+        refs.countryInfo.innerHTML = '';
+        return;
+    }
+
+
 
     API.fetchCountries(value)
         .then(renderCountryCard)
         .catch(onFetchError)
         .finally(() => form.reset());
+
+
 }
 //возвращяет промис
 
