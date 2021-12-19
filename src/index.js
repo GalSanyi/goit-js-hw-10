@@ -43,12 +43,24 @@ function onSearch(e) {
 
 function renderCountryCard(country) {
     const markup = countryCard(country);
+    const markupOneCountry = oneCountry(country);
     refs.countryInfo.innerHTML = markup;
 
-
+    if (country.length > 10) {
+        refs.countryInfo.innerHTML = '';
+        refs.countryList.id = '';
+        return Notiflix.Notify.info('Too many matches found. Please enter a more specific name.');
+    } else if (country.length >= 2 && country.length <= 10) {
+        refs.countryInfo.innerHTML = '';
+        return Notiflix.Notify.info('Too many matches found. Please enter a more specific name.');
+    } else if (country.length === 1) {
+        refs.countryInfo.innerHTML = markupOneCountry;
+        refs.countryList.innerHTML = '';
+    }
 
 }
 
 function onFetchError(error) {
     Notiflix.Notify.info('Too many matches found. Please enter a more specific name.');
+    refs.countryInfo.innerHTML = '';
 }
