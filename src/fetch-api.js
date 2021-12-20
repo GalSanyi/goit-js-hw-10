@@ -3,15 +3,9 @@
      return fetch(url)
          .then(response => {
 
-             return response.json();
-         }).then(data => {
-             if (data.status === 404) {
-                 throw new Error(data.status)
-             } else {
-                 return data;
-             }
-
-         });
+             if (response.ok) { return response.json(); }
+             throw new Error('Error fetching data');
+         })
 
  }
 
